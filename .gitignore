@@ -1,0 +1,5 @@
+**/.DS_Store
+tentacles.egg-info
+**/__pycache__
+**/.pyc
+dist
