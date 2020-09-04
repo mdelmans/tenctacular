@@ -1,5 +1,18 @@
 [[package]]
 category = "main"
+description = "ampy (Adafruit MicroPython tool) is a command line tool to interact with a CircuitPython or MicroPython board over a serial connection."
+name = "adafruit-ampy"
+optional = false
+python-versions = "*"
+version = "1.0.7"
+
+[package.dependencies]
+click = "*"
+pyserial = "*"
+python-dotenv = "*"
+
+[[package]]
+category = "main"
 description = "Composable command line interface toolkit"
 name = "click"
 optional = false
@@ -25,6 +38,25 @@ version = "0.1.1"
 
 [package.extras]
 test = ["Cython (0.29.14)"]
+
+[[package]]
+category = "main"
+description = "Python Serial Port Extension"
+name = "pyserial"
+optional = false
+python-versions = "*"
+version = "3.4"
+
+[[package]]
+category = "main"
+description = "Add .env support to your django/flask apps in development and deployments"
+name = "python-dotenv"
+optional = false
+python-versions = "*"
+version = "0.14.0"
+
+[package.extras]
+cli = ["click (>=5.0)"]
 
 [[package]]
 category = "main"
@@ -73,10 +105,14 @@ python-versions = ">=3.6.1"
 version = "8.1"
 
 [metadata]
-content-hash = "8175b1abff2ad61e10d839ac352db5086282406dfd307262a4fc86d36554306c"
-python-versions = "^3.8"
+content-hash = "4dacfa7fccee5ab84778d6a1425ac6cb95b669ff0f0f452a74914495f2b0ff48"
+python-versions = "^3.7"
 
 [metadata.files]
+adafruit-ampy = [
+    {file = "adafruit-ampy-1.0.7.tar.gz", hash = "sha256:cd8d6b831a1c76d712e30e224e3945428f77bb0c6cccbf06239b31aaf4d4e5b7"},
+    {file = "adafruit_ampy-1.0.7-py2.py3-none-any.whl", hash = "sha256:46cbb1ebb585c2c01b9d34625dbef618df95c4256a1fc6ac13cb13bbd4a8b6c0"},
+]
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
     {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
@@ -98,6 +134,14 @@ httptools = [
     {file = "httptools-0.1.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:3592e854424ec94bd17dc3e0c96a64e459ec4147e6d53c0a42d0ebcef9cb9c5d"},
     {file = "httptools-0.1.1-cp38-cp38-win_amd64.whl", hash = "sha256:0a4b1b2012b28e68306575ad14ad5e9120b34fccd02a81eb08838d7e3bbb48be"},
     {file = "httptools-0.1.1.tar.gz", hash = "sha256:41b573cf33f64a8f8f3400d0a7faf48e1888582b6f6e02b82b9bd4f0bf7497ce"},
+]
+pyserial = [
+    {file = "pyserial-3.4-py2.py3-none-any.whl", hash = "sha256:e0770fadba80c31013896c7e6ef703f72e7834965954a78e71a3049488d4d7d8"},
+    {file = "pyserial-3.4.tar.gz", hash = "sha256:6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627"},
+]
+python-dotenv = [
+    {file = "python-dotenv-0.14.0.tar.gz", hash = "sha256:8c10c99a1b25d9a68058a1ad6f90381a62ba68230ca93966882a4dbc3bc9c33d"},
+    {file = "python_dotenv-0.14.0-py2.py3-none-any.whl", hash = "sha256:c10863aee750ad720f4f43436565e4c1698798d763b63234fb5021b6c616e423"},
 ]
 starlette = [
     {file = "starlette-0.13.8-py3-none-any.whl", hash = "sha256:40afea6ffa830849800cc4efdf006a86ad579d6ba6b64cb1925a1897b020ba6e"},
