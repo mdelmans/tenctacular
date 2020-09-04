@@ -1,0 +1,1 @@
+from tentacular.manager.base_manager import Manager, Device, Firmware

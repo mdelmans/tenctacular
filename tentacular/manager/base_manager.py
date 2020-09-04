@@ -1,78 +1,80 @@
-from typing import Optional, TypeVar, Generic
+import re
 
+from ampy.pyboard import Pyboard
+from ampy.files import Files
+
+from typing import TypeVar, Generic
 from abc import ABC, abstractmethod
 
-class Firmware(ABC):
-    @abstractmethod
-    def get_name(self);
-        return
 
+D = TypeVar('DeviceType')
+F = TypeVar('FiirmwareType')
+
+
+class Firmware(ABC):
     @abstractmethod
     def get_source(self):
         return
 
-    # @classmethod
-    # @abstractmethod
-    # def find(cls, name):
-    #     return
 
-class Device(ABC):
+class Device(ABC, Generic[F]):
     @abstractmethod
-    def get_uuid(self):
+    def get_uid(self):
         return
 
     @abstractmethod
-    def get_config(self):
-        return
-
-    @classmethod
-    @abstractmethod
-    def devices(cls):
-        return
-
-    # @classmethod
-    # @abstractmethod
-    # def find(cls, uuid):
-    #     return
-
-    @abstractmethod
-    def get_firmware_name(self):
+    def set_firmware(self, firmware: F):
         return
 
     def __str__(self):
-        return f"{self.get_conf()}:{self.get_uuid()}"
+        return f"{self.get_firmware().get_name()}:{self.get_uid()}"
 
-D = TypeVar('DeviceType') 
 
-class Manager(ABC, Generic[D], Generic[F]):
-    def __init__(self, host, port, database, username, password):
-        self.host = host
-        self.port = port
-        self.database = database
-        self.username = username
-        self.password = password
+class Manager(ABC, Generic[D, F]):
+
+    def __init__(self, port, baudrate):
+        self.board = Pyboard(port, baudrate, rawdelay=1)
+        self.board_files = Files(self.board)
 
     @abstractmethod
-    def connect(self):
-        """Connect to the database
-        Establish a connection to the database.
-        """
+    def log_info(self, message: str):
         return
 
-    @abstractmethod
-    def add_device(self, firmware:F)->D:
-        """Add device
-        Add a new device with a given config.
-        Returns a new device object.
-        """
-        return
+    def flash_device(self, device: D, firmware: F):
+        uid = None
 
-    @abstractmethod
-    def get_device(self, uuid:str)->Optional[D]:
-        return
+        try:
+            uid = self.board_files.get('/flash/uid').decode()
+        except Exception:
+            pass
 
-    @abstractmethod
-    def get_firmware(self, name:str)->Optional[F]:
-        return
+        if uid is not None:
+            ureg = re.match(
+                "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}"
+                "-[0-9a-f]{12}$",
+                uid
+            )
+            if ureg:
+                uid = ureg[0]
+            else:
+                uid = None
 
+        if uid is not None and uid != device.get_uid():
+            raise Exception("UUID mismatch")
 
+        if uid is None:
+            self.board_files.put('/flash/uid', device.get_uid())
+
+        self.log_info("Uploading tentacle library...")
+        with open('flash/tentacle.py') as lib_file:
+            self.board_files.put('/flash/tentacle.py', lib_file.read())
+
+        self.log_info("Uploading bootloader...")
+        with open('flash/boot.py') as boot_file:
+            self.board_files.put('/flash/boot.py', boot_file.read())
+
+        self.log_info("Uploading source...")
+        source_file = firmware.get_source()
+        self.board_files.put('/flash/main.py', source_file)
+
+        device.set_firmware(firmware)

@@ -2,4 +2,5 @@
 tentacles.egg-info
 **/__pycache__
 **/.pyc
+tentacular.egg-info
 dist
